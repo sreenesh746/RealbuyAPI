@@ -82,7 +82,7 @@ function userController () {
 						return res.json({'error':err});
 					}
 					else{
-						res.json({'Favourite added'});
+						res.json({'status':'success'});
 					}
 				});
 			property.findOneAndUpdate(
@@ -95,7 +95,7 @@ function userController () {
 						return res.send(err);
 					}
 					else {
-						return res.json({'Favourite added'});
+						return res.json({'status':'success'});
 					}
 				});
 		}
@@ -108,7 +108,7 @@ function userController () {
 						return res.json({'error':err});
 					}
 					else {
-						res.json({'Favourite removed'});
+						res.json({'status':'success'});
 					}
 			});
 			property.findOneAndUpdate(
@@ -121,7 +121,7 @@ function userController () {
 						return res.json({'error':err});
 					}
 					else {
-						return res.json({'Favourite removed'});
+						return res.json({'status':'success'});
 					}
 				});
 		}
