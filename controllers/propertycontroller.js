@@ -86,6 +86,7 @@ function propertyController () {
 	};
 
 	this.getPropertiesAuthorized = function (req, res, next) {
+		async.parallel([
 			function(callback){
 				property.find({}).skip(req.params.page*6).limit(6).sort({favCount : -1}).exec(callback);
 			},
