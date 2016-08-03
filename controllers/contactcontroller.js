@@ -7,10 +7,10 @@ function contactController () {
         newContact.save(function(err, result) {
             if (err) {
                 console.log(err);
-                return res.send({'error':err}); 
+                return res.json({'error':err}); 
             }
             else {
-                return res.send({'result':result,'status':'successfully saved'});
+                return res.json({'result':result,'status':'successfully saved'});
             }
         });
     };
@@ -19,10 +19,10 @@ function contactController () {
         contact.find({}, function(err, result) {
             if (err) {
                 console.log(err);
-                return res.send({'error':err}); 
+                return res.json({'error':err}); 
             }
             else {
-                return res.send({'contact Us Details':result});
+                return res.json({'contact Us Details':result});
             }
         });
     };

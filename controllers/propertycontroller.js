@@ -16,14 +16,14 @@ function propertyController () {
 		newProperty.save(function(err, result) {
 			if (err) {
 				console.log(err);
-				return res.send({'error':err});	
+				return res.json({'error':err});	
 			}
 			else {
 					fs.rename(req.files.photo.path, './uploads/properties/'+Date.now()+req.files.photo.name, function(err){
 					if(err)
-						return console.error(err);		
+						console.log(err);		
 					});
-					res.send({'result':result,'status':'successfully saved'});
+					res.json({'status':'successfully saved'});
 					user.findOneAndUpdate(
 						{_id: result.owner},
 						{$push: {properties: result._id}},
@@ -31,10 +31,10 @@ function propertyController () {
 						function(err, result) {
 							if(err){
 								console.log(err);
-								return res.send(err);
+								return res.json({'error':err});
 							}
 							else{
-								return res.send({'Property added':result});
+								return res.json({'status':'successfully saved'});
 							}
 						});
 				}
@@ -52,7 +52,7 @@ function propertyController () {
 			function(err,result){
 				if(err){
 					console.log(err);
-					return res.send(err);
+					return res.json({'error': err});
 				}
 				else{
 					return res.send({'Search result':result});

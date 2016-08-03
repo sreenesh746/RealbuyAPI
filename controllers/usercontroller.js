@@ -15,14 +15,14 @@ function userController () {
 		newUser.save(function(err, result) {
 			if (err) {
 				console.log(err);
-				return res.send({'error':err});	
+				return res.json({'error':err});	
 			}
 			else {
 				fs.rename(req.files.avatar.path, './uploads/profile/'+Date.now()+req.files.avatar.name, function(err){
 					if(err)
 					return console.error(err);		
 				});
-				return res.send({'result':result,'status':'successfully saved'});
+				return res.json({'status':'successfully saved'});
 			}
 		});
 	};
@@ -65,7 +65,7 @@ function userController () {
 	this.profile=function(req,res,next)
 	{
 		console.log(JSON.stringify(req.user));
-		res.send(req.user);
+		res.json(req.user);
 	}
 
 	this.updateFavourite = function(req,res,next)
@@ -79,10 +79,10 @@ function userController () {
 				function(err, result) {
 					if(err){
 						console.log(err);
-						return res.send(err);
+						return res.json({'error':err});
 					}
 					else{
-						res.send({'Favourite added':result});
+						res.json({'Favourite added'});
 					}
 				});
 			property.findOneAndUpdate(
@@ -95,7 +95,7 @@ function userController () {
 						return res.send(err);
 					}
 					else {
-						return res.send({'Favourite added':result});
+						return res.json({'Favourite added'});
 					}
 				});
 		}
@@ -105,10 +105,10 @@ function userController () {
 				function(err,result) {
 					if(err) {
 						console.log(err);
-						return res.send(err);
+						return res.json({'error':err});
 					}
 					else {
-						return res.send({'Favourite removed':result});
+						res.json({'Favourite removed'});
 					}
 			});
 			property.findOneAndUpdate(
@@ -118,10 +118,10 @@ function userController () {
 				function(err, result) {
 					if(err) {
 						console.log(err);
-						return res.send(err);
+						return res.json({'error':err});
 					}
 					else {
-						return res.send({'Favourite added':result});
+						return res.json({'Favourite removed'});
 					}
 				});
 		}
@@ -131,11 +131,11 @@ function userController () {
 		user.find({}, function(err, result) {
 			if (err) {
 				console.log(err);
-				return res.send({'error':err}); 
+				return res.json({'error':err}); 
 			}
 			else {
 				console.log(result);
-				return res.send({'users Details':result});
+				return res.json({'users Details':result});
 			}
 		});
 	};
