@@ -22,42 +22,43 @@ function userController () {
 					if(err)
 					return console.error(err);		
 				});
-        		return res.send({'result':result,'status':'successfully saved'});
-      		}
+				return res.send({'result':result,'status':'successfully saved'});
+			}
 		});
 	};
 	
 	this.login = function(req, res,next) {
 	console.log(req.params.email);
 	console.log(req.params.password);
-    user.findOne({
-    email: req.params.email
-    }, 
-	    function(err, user) {
-	    	if (err) throw err;
-	      	if (!user) {
-	        	res.json(401,{ success: false, message: 'Authentication failed. User not found.' });
-	      	} 
-	      	else {
-	        // Check if password matches
-		        console.log(JSON.stringify(user));
-		        user.comparePassword(req.params.password, function(err, isMatch) {
-		        	if (isMatch && !err) {
-		            // Create token if the password matched and no error was thrown
-	            	const token = jwt.sign(JSON.stringify(user), config.secret, {
-	              		expiresIn: 10080 // in seconds
-	            	});
-					console.log('user'+JSON.stringify(user));
-					console.log(config.secret);
-					console.log(token);
-		            res.json(200,{ success: true, token: 'JWT ' + token });
-	          		} 
-	          		else {
-	            		res.json(401,{ success: false, message: 'Authentication failed. Passwords did not match.' });
-	          		}
-	        	});
-	      	}
-	    });
+	user.findOne({
+	email: req.params.email
+	}, 
+		function(err, user) {
+		if (err) throw err;
+			if (!user) {
+				res.json(401,{ success: false, message: 'Authentication failed. User not found.' });
+			} 
+			else {
+				// Check if password matches
+				console.log(JSON.stringify(user));
+				user.comparePassword(req.params.password, function(err, isMatch) {
+					if (isMatch && !err) {
+						// Create token if the password matched and no error was thrown
+						const token = jwt.sign(JSON.stringify(user), config.secret, {
+							expiresIn: 10080 // in seconds
+						});
+						console.log('user'+JSON.stringify(user));
+						console.log(config.secret);
+						console.log(token);
+						res.json(200,{ success: true, token: 'JWT ' + token });
+					}
+					else 
+					{
+							res.json(401,{ success: false, message: 'Authentication failed. Passwords did not match.' });
+					}
+				});
+			}
+		});
 	};
 
 
@@ -71,80 +72,73 @@ function userController () {
 	{
 		if(req.params.flag=='true')
 		{
-
 			user.findOneAndUpdate(
-		    {_id: req.user._id},
-		    {$push: {favourites: req.params.pid}},
-		    {},
-		    function(err, result) {
-		    	if(err){
-		        	console.log(err);
-		    		return res.send(err);
-		    	}
-		    	else{
-		    		res.send({'Favourite added':result});
-		    	}
-		    });
-		    property.findOneAndUpdate(
-		    {_id: req.params.pid},
-		    {$inc: {favCount: 1}},
-		    {},
-		    function(err, result) {
-		    	if(err){
-		        	console.log(err);
-		    		return res.send(err);
-		    	}
-		    	else{
-		    		return res.send({'Favourite added':result});
-		    	}
-		    });
-
+				{_id: req.user._id},
+				{$push: {favourites: req.params.pid}},
+				{},
+				function(err, result) {
+					if(err){
+						console.log(err);
+						return res.send(err);
+					}
+					else{
+						res.send({'Favourite added':result});
+					}
+				});
+			property.findOneAndUpdate(
+				{_id: req.params.pid},
+				{$inc: {favCount: 1}},
+				{},
+				function(err, result) {
+					if(err){
+						console.log(err);
+						return res.send(err);
+					}
+					else {
+						return res.send({'Favourite added':result});
+					}
+				});
 		}
 		else if(req.params.flag=='false')
 		{
-
 			user.update( {_id: req.user._id}, { $pull: {favourites: req.params.pid }},{}, 
-				function(err,result){
-					if(err){
-		        		console.log(err);
-		    			return res.send(err);
-		    		}
-		    		else{
-		    			return res.send({'Favourite removed':result});
-		    		}
-				});
+				function(err,result) {
+					if(err) {
+						console.log(err);
+						return res.send(err);
+					}
+					else {
+						return res.send({'Favourite removed':result});
+					}
+			});
 			property.findOneAndUpdate(
-		    {_id: req.params.pid},
-		    {$inc: {favCount: -1}},
-		    {},
-		    function(err, result) {
-		    	if(err){
-		        	console.log(err);
-		    		return res.send(err);
-		    	}
-		    	else{
-		    		return res.send({'Favourite added':result});
-		    	}
-		    });
-
+				{_id: req.params.pid},
+				{$inc: {favCount: -1}},
+				{},
+				function(err, result) {
+					if(err) {
+						console.log(err);
+						return res.send(err);
+					}
+					else {
+						return res.send({'Favourite added':result});
+					}
+				});
 		}
-
-
 	};
-
-  	// Fetching Details of Users
-  	this.getUsers = function (req, res, next) {
-    	user.find({}, function(err, result) {
-      		if (err) {
-		        console.log(err);
-		        return res.send({'error':err}); 
-      		}
-      		else {
-		      	console.log(result);
-		        return res.send({'users Details':result});
-      		}
-    	});
-  	};
+	// Fetching Details of Users
+	this.getUsers = function (req, res, next) {
+		user.find({}, function(err, result) {
+			if (err) {
+				console.log(err);
+				return res.send({'error':err}); 
+			}
+			else {
+				console.log(result);
+				return res.send({'users Details':result});
+			}
+		});
+	};
 	return this;
 };
 

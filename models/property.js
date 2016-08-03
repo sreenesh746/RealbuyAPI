@@ -22,7 +22,7 @@ var propertySchema = new mongoose.Schema({
 		addedOn: {type: Date, default: Date.now},
 		transactionType: {type: String, required: true},
 		favCount: {type: Number, default: 0}
-	});
+});
 	
-	propertySchema.index({address: 'text', city: 'text'});
-	module.exports = mongoose.model('property', propertySchema);
+propertySchema.index({address: 'text', city: 'text'});
+module.exports = mongoose.model('property', propertySchema);
