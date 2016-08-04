@@ -30,7 +30,8 @@ module.exports = function(app) {
     app.get('/realbuyapi/profile', requireAuth, function(req, res, next) {
         user.profile(req, res, next);
     });
-    app.get('/realbuyapi', function(req, res, next) {
+    app.get('/realbuyapi',
+        function(req, res, next) {
             passport.authenticate('jwt', {
                 session: false
             }, function(error, user, info, status) {
@@ -45,5 +46,7 @@ module.exports = function(app) {
         function(req, res, next) {
             console.log(req.user);
             property.getPropertiesAuthorized(req, res, next);
-        });
+        }
+
+    );
 };
