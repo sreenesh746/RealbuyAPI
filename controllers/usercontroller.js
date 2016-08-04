@@ -9,6 +9,7 @@ function userController() {
     // Creating New User
     this.createUser = function(req, res, next) {
         console.log(req.files);
+        console.log(req.params);
         var profile = req.params;
         profile['photo'] = 'http://localhost:9001/uploads/profile/' + Date.now() + req.files.avatar.name;
         var newUser = new user(profile);
@@ -49,7 +50,8 @@ function userController() {
                     user.comparePassword(req.params.password, function(err, isMatch) {
                         if (isMatch && !err) {
                             // Create token if the password matched and no error was thrown
-                            const token = jwt.sign(JSON.stringify(user), config.secret, {
+                            delete user['password'];
+                            const token = jwt.sign(JSON.stringify({id : user._id}), config.secret, {
                                 expiresIn: 10080 // in seconds
                             });
                             console.log('user' + JSON.stringify(user));
