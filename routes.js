@@ -31,9 +31,19 @@ module.exports = function(app) {
         user.profile(req, res, next);
     });
     app.get('/realbuyapi', function(req, res, next) {
-        property.getProperties(req, res, next);
-    });
-    app.get('/realbuyapi/authorized', requireAuth, function(req, res, next) {
-        property.getPropertiesAuthorized(req, res, next);
-    });
+            passport.authenticate('jwt', {
+                session: false
+            }, function(error, user, info, status) {
+                if (user) {
+                    // Just unauthorized - nothing serious, so continue normally
+                    req.user = user;
+                    return next();
+                }
+                property.getProperties(req, res, next);
+            })(req, res, next);
+        },
+        function(req, res, next) {
+            console.log(req.user);
+            property.getPropertiesAuthorized(req, res, next);
+        });
 };
