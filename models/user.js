@@ -3,21 +3,45 @@ var mongoose = require('../db').mongoose;
 const bcrypt = require('bcrypt');
 
 var userSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    phone: {type: Number, required: true},
-    address: {type: String, required: true},
-    photo: {type: String},
-    properties: [{type: mongoose.Schema.Types.ObjectId, ref:'property'}],
-    favourites: [{type: mongoose.Schema.Types.ObjectId, ref:'property'}]
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: Number,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    photo: {
+        type: String
+    },
+    properties: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'property'
+    }],
+    favourites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'property'
+    }]
 });
 
 // Saves the user's password hashed (plain text password storage is not good)
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function(next) {
     const user = this;
     if (this.isModified('password') || this.isNew) {
-        bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.genSalt(10, function(err, salt) {
             if (err) {
                 return next(err);
             }
@@ -29,9 +53,7 @@ userSchema.pre('save', function (next) {
                 next();
             });
         });
-    }
-    else 
-    {
+    } else {
         return next();
     }
 });
