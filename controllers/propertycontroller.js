@@ -3,6 +3,8 @@ function propertyController() {
     var user = require('../models/user');
     var fs = require('fs');
     var async = require('async');
+    var base64 = require('../base64');
+    var base64all = require('../base64all');
     // Creating New Property
     this.createProperty = function(req, res, next) {
         var propertyDetails = req.params;
@@ -11,7 +13,9 @@ function propertyController() {
         delete propertyDetails['lng'];
         delete propertyDetails['lat'];
         propertyDetails['location'] = location;
-        propertyDetails['photo'] = 'http://localhost:9001/uploads/properties/' + Date.now() + req.files.photo.name;
+        console.log(req.files);
+        var currentDateTime=Date.now();
+        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
         var newProperty = new property(propertyDetails);
         newProperty.save(function(err, result) {
             if (err) {
@@ -20,7 +24,7 @@ function propertyController() {
                     'error': err
                 });
             } else {
-                fs.rename(req.files.photo.path, './uploads/properties/' + Date.now() + req.files.photo.name, function(err) {
+                fs.rename(req.files.photo.path, './uploads/properties/' + currentDateTime + req.files.photo.name, function(err) {
                     if (err)
                         console.log(err);
                 });
@@ -72,95 +76,101 @@ function propertyController() {
                         'error': err
                     });
                 } else {
-                    return res.send({
-                        'Search result': result
-                    });
+                    req.result=result;
+                    base64(req,res,next);
                 }
             });
     };
 
+    this.getFeaturedProperties=function(req,res,next) {
+         property.find({}).skip(req.params.page * 6).limit(6).sort({
+                        favCount: -1
+                    }).exec(function(err,result) {
+            if(err)
+                return res.json({'error':err});
+                req.result=result;
+                base64(req,res,next);
+         });
+    };
     // Fetching Details of Properties
     this.getProperties = function(req, res, next) {
         async.parallel([
                 function(callback) {
-                    property.find({}).skip(req.params.page * 6).limit(6).sort({
+                    property.find({}).sort({
                         favCount: -1
-                    }).exec(callback);
+                    }).limit(6).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'COMMERCIAL'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'FURNISHED HOMES'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'LAND AND PLOT'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'RENTAL'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
-                },
+                    }).limit(9).exec(callback);
+                }
             ],
             function(err, results) {
-                res.json({
-                    featured: results[0],
-                    commercial: results[1],
-                    furnishedHomes: results[2],
-                    landAndPlot: results[3],
-                    rental: results[4]
-                });
+                //console.log(results);
+                req.results=results;
+                base64all(req,res,next);
+               
             });
     };
 
     this.getPropertiesAuthorized = function(req, res, next) {
         async.parallel([
                 function(callback) {
-                    property.find({}).skip(req.params.page * 6).limit(6).sort({
+                    property.find({}).sort({
                         favCount: -1
-                    }).exec(callback);
+                    }).limit(6).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'COMMERCIAL'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'FURNISHED HOMES'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'LAND AND PLOT'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     property.find({
                         propertyType: 'RENTAL'
-                    }).limit(9).sort({
+                    }).sort({
                         addedOn: -1
-                    }).exec(callback);
+                    }).limit(9).exec(callback);
                 },
                 function(callback) {
                     user.find({
@@ -169,14 +179,8 @@ function propertyController() {
                 }
             ],
             function(err, results) {
-                res.json({
-                    featured: results[0],
-                    commercial: results[1],
-                    furnishedHomes: results[2],
-                    landAndPlot: results[3],
-                    rental: results[4],
-                    favourites: results[5]
-                });
+                req.results=results;
+                base64all(req,res,next);
             });
     };
     return this;

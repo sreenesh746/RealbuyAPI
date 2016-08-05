@@ -49,4 +49,5 @@ module.exports = function(app) {
         }
 
     );
+    app.get('/realbuyapi/featured',property.getFeaturedProperties);
 };

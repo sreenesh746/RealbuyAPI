@@ -2,5 +2,5 @@ module.exports =
 {
 	'secret' : 'longobnoxiouspassphrase',
 	'dbPath' : 'mongodb://localhost/realbuy-api',
-	'port' : 9000
+	'port' : 9002
 };

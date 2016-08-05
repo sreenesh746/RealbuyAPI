@@ -11,7 +11,8 @@ function userController() {
         console.log(req.files);
         console.log(req.params);
         var profile = req.params;
-        profile['photo'] = 'http://localhost:9001/uploads/profile/' + Date.now() + req.files.avatar.name;
+        var currentDateTime=Date.now();
+        profile['photo'] = './uploads/profile/' + currentDateTime + req.files.avatar.name;
         var newUser = new user(profile);
         newUser.save(function(err, result) {
             if (err) {
@@ -20,7 +21,7 @@ function userController() {
                     'error': err
                 });
             } else {
-                fs.rename(req.files.avatar.path, './uploads/profile/' + Date.now() + req.files.avatar.name, function(err) {
+                fs.rename(req.files.avatar.path, './uploads/profile/' + currentDateTime + req.files.avatar.name, function(err) {
                     if (err)
                         return console.error(err);
                 });

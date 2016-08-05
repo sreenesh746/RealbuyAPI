@@ -68,4 +68,4 @@ userSchema.methods.comparePassword = function(pw, cb) {
     });
 };
 
-module.exports = module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('user', userSchema);
