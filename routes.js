@@ -1,5 +1,5 @@
 const passport = require('passport');
-const config = require('./config');
+const config = require('./settings/config');
 const jwt = require('jsonwebtoken');
 const requireAuth = passport.authenticate('jwt', {
     session: false
@@ -8,7 +8,7 @@ module.exports = function(app) {
     // Initialize passport for use
     app.use(passport.initialize());
     // Bring in defined Passport Strategy
-    require('./passport')(passport);
+    require('./settings/passport')(passport);
     var user = require('./controllers/usercontroller');
     var property = require('./controllers/propertycontroller');
     var contact = require('./controllers/contactcontroller');
@@ -19,7 +19,6 @@ module.exports = function(app) {
         property.createProperty(req, res, next);
     });
     app.post('/realbuyapi/signup', user.createUser); //Create User API
-    app.get('/realbuyapi/getUsers', user.getUsers); // Get All Users Details API
     app.post('/realbuyapi/contact', contact.createContact); //Create Contact Us API
     app.get('/realbuyapi/contact', contact.getContactUs); // Get All Contact Us Message Details API
     app.get('/realbuyapi/search', property.search);
@@ -36,18 +35,12 @@ module.exports = function(app) {
                 session: false
             }, function(error, user, info, status) {
                 if (user) {
-                    // Just unauthorized - nothing serious, so continue normally
                     req.user = user;
-                    return next();
+                    property.getPropertiesAuthorized(req, res, next);
                 }
                 property.getProperties(req, res, next);
             })(req, res, next);
-        },
-        function(req, res, next) {
-            console.log(req.user);
-            property.getPropertiesAuthorized(req, res, next);
         }
-
     );
     app.get('/realbuyapi/featured',property.getFeaturedProperties);
 };

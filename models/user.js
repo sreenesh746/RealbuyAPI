@@ -1,5 +1,5 @@
 // Model for the User
-var mongoose = require('../db').mongoose;
+var mongoose = require('../settings/db').mongoose;
 const bcrypt = require('bcrypt');
 
 var userSchema = new mongoose.Schema({

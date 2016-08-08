@@ -1,5 +1,5 @@
 // Model for contact US message
-var mongoose = require('../db').mongoose;
+var mongoose = require('../settings/db').mongoose;
 var contactSchema = mongoose.Schema({
     name: {
         type: String,

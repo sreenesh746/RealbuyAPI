@@ -8,7 +8,7 @@ module.exports = function(req,res,next){
         async.forEach(req.result, function(item, callback) {
             if(item.photo) {
                 var data = fs.readFileSync(item.photo);
-                console.log(fileType(data));
+                console.log(fileType(data).mime);
                 var base64data = 'data:'+fileType(data).mime+',';
                 base64data+= new Buffer(data).toString('base64');
                 item.photo=base64data;

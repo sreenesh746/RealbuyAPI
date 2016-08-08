@@ -1,5 +1,5 @@
 var restify = require('restify');
-var config = require('./config');
+var config = require('./settings/config');
 var app = restify.createServer({
     name: 'Realbuy-api'
 });
