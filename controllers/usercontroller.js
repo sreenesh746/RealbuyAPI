@@ -1,11 +1,11 @@
 function userController() {
+    var log = require('../logger');
     var dbHelper = require('../helpers/userdbhelper');
 
     // Creating New User
     this.createUser = function(req, res, next) {
-        console.log(req.files);
-        console.log(req.params);
         var profile = req.params;
+        log.info(profile);
         var currentDateTime=Date.now();
         profile['photo'] = './uploads/profile/' + currentDateTime + req.files.avatar.name;
         req.profile = profile;
@@ -18,6 +18,7 @@ function userController() {
 
 
     this.profile = function(req, res, next) {
+        log.info(req.user);
         res.json(req.user);
     }
 

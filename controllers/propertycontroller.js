@@ -8,15 +8,15 @@ function propertyController() {
         delete propertyDetails['lng'];
         delete propertyDetails['lat'];
         propertyDetails['location'] = location;
-        console.log(req.files);
         var currentDateTime=Date.now();
         propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
+        log.info(propertyDetails);
         req.propertyDetails = propertyDetails;
         dbHelper.addProperty(req,res,next);
     };
 
     this.search = function(req, res, next) {
-        console.log(req.params);
+        log.info(req.params);
         dbHelper.search(req,res,next);
     };
 

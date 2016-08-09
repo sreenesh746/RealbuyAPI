@@ -1,4 +1,5 @@
 var fs= require('fs');
+var log = require('../logger');
 const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach')
@@ -10,9 +11,6 @@ module.exports = function(req,res,next){
             async.forEach(result, function(item, callback) {
                 if(item.photo) {
                     var data = fs.readFileSync(item.photo);
-                    //console.log(mime.lookup(data));
-                    console.log(item.photo);
-                    console.log(fileType(data).mime);
                     var base64data = 'data:'+fileType(data).mime+',';
                     base64data+= new Buffer(data).toString('base64');
                     item.photo=base64data;
@@ -20,15 +18,22 @@ module.exports = function(req,res,next){
                 callback();
             }, 
             function(err) {
+                if(err)
+                    log.error(err);
                 callback();
             });
         }, 
         function(err) {
+            if(err)
+                log.error(err);
             callback(undefined, req.results);
         });
     };
 
     processResults(function(err, results) {
+        if(err)
+            log.error(err);
+        log.info('Images processed successfully');
         res.json({
             featured: results[0],
             commercial: results[1],

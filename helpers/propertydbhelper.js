@@ -1,5 +1,6 @@
 function propertyDbHelper() {
     var fs = require('fs');
+    var log = require('../logger');
     var async = require('async');
     var base64 = require('./base64');
     var base64all = require('./base64all');
@@ -10,15 +11,16 @@ function propertyDbHelper() {
         var newProperty = new property(req.propertyDetails);
         newProperty.save(function(err, result) {
             if (err) {
-                console.log(err);
-                return res.json({
+                log.error(err);
+                return res.json(400,{
                     'error': err
                 });
             } else {
                 fs.rename(req.files.photo.path, req.propertyDetails['photo'], function(err) {
                     if (err)
-                        console.log(err);
+                        log.error(err);
                 });
+                log.info('property added');
                 res.json({
                     'status': 'successfully saved'
                 });
@@ -31,11 +33,12 @@ function propertyDbHelper() {
                     }, {},
                     function(err, result) {
                         if (err) {
-                            console.log(err);
+                            log.error(err);
                             return res.json({
                                 'error': err
                             });
                         } else {
+                            log.info('property added to owner');
                             return res.json({
                                 'status': 'successfully saved'
                             });
@@ -61,11 +64,12 @@ function propertyDbHelper() {
             },
             function(err, result) {
                 if (err) {
-                    console.log(err);
+                    log.error(err);
                     return res.json({
                         'error': err
                     });
                 } else {
+                    log.info('Search successful');
                     req.result = result;
                     base64(req, res, next);
                 }
@@ -76,10 +80,13 @@ function propertyDbHelper() {
         property.find({}).skip(req.params.page * 6).limit(6).sort({
             favCount: -1
         }).exec(function(err, result) {
-            if (err)
+            if (err) {
+                log.error(err);
                 return res.json({
                     'error': err
                 });
+            }
+            log.info('featured properties fetched from database');
             req.result = result;
             base64(req, res, next);
         });
@@ -120,7 +127,7 @@ function propertyDbHelper() {
                 }
             ],
             function(err, results) {
-                //console.log(results);
+                log.info('Properties fetched from database');
                 req.results = results;
                 base64all(req, res, next);
 
@@ -169,6 +176,7 @@ function propertyDbHelper() {
                 }
             ],
             function(err, results) {
+                log.info('Properties and favourites fetched from database');
                 req.results = results;
                 base64all(req, res, next);
             });
