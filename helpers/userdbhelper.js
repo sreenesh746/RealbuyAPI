@@ -76,8 +76,11 @@ function userDbHelper() {
     };
 
     //TODO: you can combine addFavourite and removeFavourite
-    this.addFavourite = function(req, res, next) {
-        user.findOneAndUpdate({
+    this.updateFavourite = function(req, res, next) {
+        var addOrRemove=0;
+        if(req.params.flag=='true'){
+            addOrRemove = 1;
+            user.findOneAndUpdate({
                 _id: req.user._id
             }, {
                 $push: {
@@ -93,32 +96,14 @@ function userDbHelper() {
                 } else {
                     log.info('favourite added');
                     res.json({
-                        'status': 'success'
+                        status: 'success'
                     });
                 }
             });
-        property.findOneAndUpdate({
-                _id: req.params.pid
-            }, {
-                $inc: {
-                    favCount: 1
-                }
-            }, {},
-            function(err, result) {
-                if (err) {
-                    log.error(err);
-                    return res.send(err);
-                } else {
-                    log.info('favourite count incremented');
-                    return res.json({
-                        'status': 'success'
-                    });
-                }
-            });
-    };
-
-    this.removeFavourite = function(req, res, next) {
-        user.update({
+        }
+        else if(req.params.flag=='false'){
+            addOrRemove = -1;
+            user.update({
                 _id: req.user._id
             }, {
                 $pull: {
@@ -129,36 +114,37 @@ function userDbHelper() {
                 if (err) {
                     log.info('Property not found');
                     return res.json(404,{
-                        'error': 'Property not found'
+                        error: 'Property not found'
                     });
                 } else {
                     log.info('favourite removed');
                     res.json({
-                        'status': 'success'
+                        status: 'success'
                     });
                 }
             });
+        }
+        else {
+            return res.json(400,{message:'Invalid flag value'});
+        }
         property.findOneAndUpdate({
                 _id: req.params.pid
             }, {
                 $inc: {
-                    favCount: -1
+                    favCount: addOrRemove
                 }
             }, {},
             function(err, result) {
                 if (err) {
                     log.error(err);
-                    return res.json({
-                        'error': err
-                    });
+                    return res.send(err);
                 } else {
-                     log.info('favourite count decremented');
+                    log.info('favourite count updated');
                     return res.json({
-                        'status': 'success'
+                        status: 'success'
                     });
                 }
             });
-
     };
 
     return this;

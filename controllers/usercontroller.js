@@ -25,11 +25,7 @@ function userController() {
     }
 
     this.updateFavourite = function(req, res, next) {
-        if (req.params.flag == 'true') {
-            dbHelper.addFavourite(req,res,next);
-        } else if (req.params.flag == 'false') {
-            dbHelper.removeFavourite(req,res,next);
-        }       
+       dbHelper.updateFavourite(req,res,next);
     };
   
     return this;
