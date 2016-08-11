@@ -29,7 +29,7 @@ function contactController() {
                     'error': err
                 });
             } else {
-                log.info('successfully Retrieved';)
+                log.info('successfully Retrieved');
                 return res.json({
                     'contact Us Details': result
                 });
