@@ -6,9 +6,7 @@ const requireAuth = passport.authenticate('jwt', {
 });
 module.exports = function(app) {
     //TODO: remove silly comments inside functions, comment only the logics that is if they are complex.
-    // Initialize passport for use
     app.use(passport.initialize());
-    // Bring in defined Passport Strategy
     require('./settings/passport')(passport);
     var user = require('./controllers/usercontroller');
     var property = require('./controllers/propertycontroller');
@@ -16,17 +14,17 @@ module.exports = function(app) {
     app.get('/', function(req, res, next) {
         return res.send("WELCOME TO REST API");
     });
-    app.post('/realbuyapi/addProperty', requireAuth, function(req, res, next) { //Create Property API
+    app.post('/realbuyapi/addProperty', requireAuth, function(req, res, next) {
         property.createProperty(req, res, next);
     });
-    app.post('/realbuyapi/signup', user.createUser); //Create User API
-    app.post('/realbuyapi/contact', contact.createContact); //Create Contact Us API
-    app.get('/realbuyapi/contact', contact.getContactUs); // Get All Contact Us Message Details API
+    app.post('/realbuyapi/signup', user.createUser); 
+    app.post('/realbuyapi/contact', contact.createContact); 
+    app.get('/realbuyapi/contact', contact.getContactUs); 
     app.get('/realbuyapi/search', property.search);
-    app.put('/realbuyapi/favourite', requireAuth, function(req, res, next) { // favourite/unfavourite a property API
+    app.put('/realbuyapi/favourite', requireAuth, function(req, res, next) { 
         user.updateFavourite(req, res, next);
     });
-    app.post('/realbuyapi/login', user.login); //Create Property API
+    app.post('/realbuyapi/login', user.login); 
     app.get('/realbuyapi/profile', requireAuth, function(req, res, next) {
         user.profile(req, res, next);
     });

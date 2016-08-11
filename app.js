@@ -7,6 +7,7 @@ var app = restify.createServer({
 });
 
 //TODO: why do we use app.pre ??
+// To log all requests to console
 app.pre(function (request, response, next) {
     request.log.info({ req: request }, 'REQUEST');
     next();
@@ -16,14 +17,14 @@ var cors = require('cors');
 
 app.use(restify.fullResponse());
 app.use(restify.bodyParser({
-    auto: { // Automatic parsing 
+    auto: { 
         fields: true
     },
-    multipart: true, // Multipart content parsing 
-    urlencoded: true, // Urlencoded content parsing 
-    encoding: 'utf8', // Default encoding 
-    keepExtensions: true, // keep extensions for multipart data
-    mapparams: true // to user req.params
+    multipart: true, 
+    urlencoded: true, 
+    encoding: 'utf8',
+    keepExtensions: true, 
+    mapparams: true 
 }));
 app.use(cors());
 app.use(restify.queryParser());

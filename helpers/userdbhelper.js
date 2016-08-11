@@ -32,26 +32,29 @@ function userDbHelper() {
         user.findOne({
                 email: req.params.email
             },
-            function(err, user) {
-                //TODO: use diff name here, confused with 'user'
+            function(err, authUser) {
+                //TODO: use diff name here, confused with 'user', fixed
                 if (err)
+                {
                     log.error(err);
-                    //TODO: why no response
-                else if (!user) {
+                    res.json(400,{message:'Bad Request'});
+                }
+
+                    //TODO: why no response, fixed
+                else if (!authUser) {
                     log.info('Authentication failed. User not found.');
                     res.json(401, {
                         success: false,
                         message: 'Authentication failed. User not found.'
                     });
                 } else {
-                    // Check if password matches
-                    user.comparePassword(req.params.password, function(err, isMatch) {
-                        if (isMatch && !err) {
-                            //TODO: why checking for err and isMatch at the same time
+                        // Check if password matches
+                        authUser.comparePassword(req.params.password, function(err, isMatch) {
+                        if (isMatch) {
+                            //TODO: why checking for err and isMatch at the same time, fixed
                             // Create token if the password matched and no error was thrown
-                            delete user['password'];
                             const token = jwt.sign({
-                                id: user._id
+                                id: authUser._id
                             }, config.secret, {
                                 expiresIn: 180 // in seconds
                             });

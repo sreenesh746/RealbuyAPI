@@ -30,9 +30,9 @@ function contactController() {
                 });
             } else {
                 log.info('successfully Retrieved');
-                //TODO: why is the json key a sentence, it should be a key
+                //TODO: why is the json key a sentence, it should be a key, fixed
                 return res.json({
-                    'contact Us Details': result
+                    messages: result
                 });
             }
         });
