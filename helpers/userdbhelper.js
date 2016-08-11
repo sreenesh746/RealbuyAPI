@@ -2,6 +2,7 @@ function userDbHelper() {
     var log = require('../logger');
     var fs = require('fs');
     var user = require('../models/user');
+    var authUser = require('../models/user');
     var property = require('../models/property')
     const config = require('../settings/config');
     const passport = require('passport');
@@ -75,7 +76,7 @@ function userDbHelper() {
             });
     };
 
-    //TODO: you can combine addFavourite and removeFavourite
+    //TODO: you can combine addFavourite and removeFavourite, done
     this.updateFavourite = function(req, res, next) {
         var addOrRemove=0;
         if(req.params.flag=='true'){

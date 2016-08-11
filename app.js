@@ -8,10 +8,10 @@ var app = restify.createServer({
 
 //TODO: why do we use app.pre ??
 // To log all requests to console
-app.pre(function (request, response, next) {
+/*app.pre(function (request, response, next) {
     request.log.info({ req: request }, 'REQUEST');
     next();
-});
+});*/
 
 var cors = require('cors');
 

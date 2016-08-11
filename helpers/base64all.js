@@ -10,12 +10,12 @@ module.exports.toBase64 = function(results,res,favourites){
     var processResults = function(callback) {
         async.forEach(results, function(result, callback) {
             async.forEach(result, function(item, callback) {
-                if(item.photo) {
+               /* if(item.photo) {
                     var data = fs.readFileSync(item.photo);
                     var base64data = 'data:'+fileType(data).mime+',';
                     base64data+= new Buffer(data).toString('base64');
                     item.photo=base64data;
-                }
+                }*/
                 callback();
             }, 
             function(err) {
@@ -33,7 +33,10 @@ module.exports.toBase64 = function(results,res,favourites){
 
     processResults(function(err, results,favourites) {
         if(err)
+        {
             log.error(err);
+            res.json(500,{error:err});
+        }
         log.info('Images processed successfully');
         res.json({
             featured: results[0],

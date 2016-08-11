@@ -14,20 +14,14 @@ module.exports = function(app) {
     app.get('/', function(req, res, next) {
         return res.send("WELCOME TO REST API");
     });
-    app.post('/realbuyapi/addProperty', requireAuth, function(req, res, next) {
-        property.createProperty(req, res, next);
-    });
+    app.post('/realbuyapi/addProperty', requireAuth, property.createProperty);
     app.post('/realbuyapi/signup', user.createUser); 
     app.post('/realbuyapi/contact', contact.createContact); 
     app.get('/realbuyapi/contact', contact.getContactUs); 
     app.get('/realbuyapi/search', property.search);
-    app.put('/realbuyapi/favourite', requireAuth, function(req, res, next) { 
-        user.updateFavourite(req, res, next);
-    });
+    app.put('/realbuyapi/favourite', requireAuth, user.updateFavourite);
     app.post('/realbuyapi/login', user.login); 
-    app.get('/realbuyapi/profile', requireAuth, function(req, res, next) {
-        user.profile(req, res, next);
-    });
+    app.get('/realbuyapi/profile', requireAuth, user.profile);
     app.get('/realbuyapi', property.getProperties);
     app.get('/realbuyapi/featured',property.getFeaturedProperties);
 };

@@ -9,13 +9,15 @@ function propertyDbHelper() {
 
     this.addProperty = function(req, res, next) {
         var propertyDetails = req.params;
+        console.log(req.files.photo);
+        var filename = req.files.photo.name;
         propertyDetails.owner = req.user._id;
         location = [propertyDetails['lng'], propertyDetails['lat']];
         delete propertyDetails['lng'];
         delete propertyDetails['lat'];
         propertyDetails['location'] = location;
         var currentDateTime=Date.now();
-        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
+        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + filename;
         log.info(propertyDetails);
         var newProperty = new property(propertyDetails);
         newProperty.save(function(err, result) {
@@ -25,7 +27,7 @@ function propertyDbHelper() {
                     'error': err
                 });
             } else {
-                fs.rename(req.files.photo.path, req.propertyDetails['photo'], function(err) {
+                fs.rename(req.files.photo.path, propertyDetails['photo'], function(err) {
                     if (err)
                         log.error(err);
                 });
@@ -79,7 +81,8 @@ function propertyDbHelper() {
                     });
                 } else {
                     log.info('Search successful');
-                    base64(result, res, next);
+                    req.result = result;
+                    base64.toBase64(result, res);
                 }
             });
     };
