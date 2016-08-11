@@ -8,7 +8,16 @@ function propertyDbHelper() {
     var user = require('../models/user');
 
     this.addProperty = function(req, res, next) {
-        var newProperty = new property(req.propertyDetails);
+        var propertyDetails = req.params;
+        propertyDetails.owner = req.user._id;
+        location = [propertyDetails['lng'], propertyDetails['lat']];
+        delete propertyDetails['lng'];
+        delete propertyDetails['lat'];
+        propertyDetails['location'] = location;
+        var currentDateTime=Date.now();
+        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
+        log.info(propertyDetails);
+        var newProperty = new property(propertyDetails);
         newProperty.save(function(err, result) {
             if (err) {
                 log.error(err);

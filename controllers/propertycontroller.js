@@ -6,17 +6,7 @@ function propertyController() {
     const jwt = require('jsonwebtoken');
     // Creating New Property
     this.createProperty = function(req, res, next) {
-        //TODO: why didnt you move this function to helper, you moved every other functions
-        var propertyDetails = req.params;
-        propertyDetails.owner = req.user._id;
-        location = [propertyDetails['lng'], propertyDetails['lat']];
-        delete propertyDetails['lng'];
-        delete propertyDetails['lat'];
-        propertyDetails['location'] = location;
-        var currentDateTime=Date.now();
-        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
-        log.info(propertyDetails);
-        req.propertyDetails = propertyDetails;
+        //TODO: why didnt you move this function to helper, you moved every other functions, moved
         dbHelper.addProperty(req,res,next);
     };
 
