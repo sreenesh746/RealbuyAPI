@@ -135,62 +135,12 @@ function propertyDbHelper() {
             ],
             function(err, results) {
                 log.info('Properties fetched from database');
-                req.results = results;
-                base64all.toBase64(req, res, next);
-
+                if(req.user)
+                    base64all.toBase64(results, res, req.user.favourites);
+                else
+                    base64all.toBase64(results, res,null);
             });
     };
-
-    this.getPropertiesAuthorized=function(req, res, next) {
-        //TODO: can combine async.parallel of getPropertiesAuthorized and that of getProperties
-        async.parallel([
-                function(callback) {
-                    property.find({}).sort({
-                        favCount: -1
-                    }).limit(6).exec(callback);
-                },
-                function(callback) {
-                    property.find({
-                        propertyType: 'COMMERCIAL'
-                    }).sort({
-                        addedOn: -1
-                    }).limit(9).exec(callback);
-                },
-                function(callback) {
-                    property.find({
-                        propertyType: 'FURNISHED HOMES'
-                    }).sort({
-                        addedOn: -1
-                    }).limit(9).exec(callback);
-                },
-                function(callback) {
-                    property.find({
-                        propertyType: 'LAND AND PLOT'
-                    }).sort({
-                        addedOn: -1
-                    }).limit(9).exec(callback);
-                },
-                function(callback) {
-                    property.find({
-                        propertyType: 'RENTAL'
-                    }).sort({
-                        addedOn: -1
-                    }).limit(9).exec(callback);
-                },
-                function(callback) {
-                    user.find({
-                        _id: req.user._id
-                    }).select('favourites').exec(callback);
-                }
-            ],
-            function(err, results) {
-                log.info('Properties and favourites fetched from database');
-                req.results = results;
-                //TODO: why sending req to base64all?
-                base64all.toBase64(req, res, next);
-            });
-    };
-
     return this;
 }
 

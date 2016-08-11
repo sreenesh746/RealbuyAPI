@@ -4,11 +4,11 @@ const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach')
 var mime = require('mime-types');
-//TODO: Named function please
-module.exports.toBase64 = function(req,res,next){
+//TODO: Named function please, done
+module.exports.toBase64 = function(results,res,favourites){
 
     var processResults = function(callback) {
-        async.forEach(req.results, function(result, callback) {
+        async.forEach(results, function(result, callback) {
             async.forEach(result, function(item, callback) {
                 if(item.photo) {
                     var data = fs.readFileSync(item.photo);
@@ -27,11 +27,11 @@ module.exports.toBase64 = function(req,res,next){
         function(err) {
             if(err)
                 log.error(err);
-            callback(undefined, req.results);
+            callback(undefined, results,favourites);
         });
     };
 
-    processResults(function(err, results) {
+    processResults(function(err, results,favourites) {
         if(err)
             log.error(err);
         log.info('Images processed successfully');
@@ -41,7 +41,7 @@ module.exports.toBase64 = function(req,res,next){
             furnishedHomes: results[2],
             landAndPlot: results[3],
             rental: results[4],
-			favourites: results[5]
+			favourites: favourites
         });
     });
 };

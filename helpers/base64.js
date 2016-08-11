@@ -4,7 +4,7 @@ const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach');
 //TODO: please use a named function, done
-module.exports.toBase64 = function(result,res,next){
+module.exports.toBase64 = function(result,res){
 
     var processResults = function(callback) {
         async.forEach(result, function(item, callback) {

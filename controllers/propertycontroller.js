@@ -26,7 +26,6 @@ function propertyController() {
             }, function(error, user, info, status) {
                 if (user) {
                     req.user = user;
-                    dbHelper.getPropertiesAuthorized(req,res,next);
                 }
                 dbHelper.getProperties(req,res,next);
             })(req, res, next);
