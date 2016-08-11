@@ -135,6 +135,7 @@ function propertyDbHelper() {
     };
 
     this.getPropertiesAuthorized=function(req, res, next) {
+        //TODO: can combine async.parallel of getPropertiesAuthorized and that of getProperties
         async.parallel([
                 function(callback) {
                     property.find({}).sort({
@@ -178,6 +179,7 @@ function propertyDbHelper() {
             function(err, results) {
                 log.info('Properties and favourites fetched from database');
                 req.results = results;
+                //TODO: why sending req to base64all?
                 base64all(req, res, next);
             });
     };

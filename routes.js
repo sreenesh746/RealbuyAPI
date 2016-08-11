@@ -5,6 +5,7 @@ const requireAuth = passport.authenticate('jwt', {
     session: false
 });
 module.exports = function(app) {
+    //TODO: remove silly comments inside functions, comment only the logics that is if they are complex.
     // Initialize passport for use
     app.use(passport.initialize());
     // Bring in defined Passport Strategy
@@ -30,6 +31,7 @@ module.exports = function(app) {
         user.profile(req, res, next);
     });
     app.get('/realbuyapi',
+        //TODO: move this to controller
         function(req, res, next) {
             passport.authenticate('jwt', {
                 session: false

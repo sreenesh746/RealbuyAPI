@@ -30,6 +30,7 @@ function contactController() {
                 });
             } else {
                 log.info('successfully Retrieved');
+                //TODO: why is the json key a sentence, it should be a key
                 return res.json({
                     'contact Us Details': result
                 });

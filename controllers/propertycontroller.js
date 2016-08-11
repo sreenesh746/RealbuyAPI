@@ -2,6 +2,7 @@ function propertyController() {
     var dbHelper = require('../helpers/propertydbhelper')
     // Creating New Property
     this.createProperty = function(req, res, next) {
+        //TODO: why didnt you move this function to helper, you moved every other functions
         var propertyDetails = req.params;
         propertyDetails.owner = req.user._id;
         location = [propertyDetails['lng'], propertyDetails['lat']];

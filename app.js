@@ -6,6 +6,7 @@ var app = restify.createServer({
     log : log
 });
 
+//TODO: why do we use app.pre ??
 app.pre(function (request, response, next) {
     request.log.info({ req: request }, 'REQUEST');
     next();

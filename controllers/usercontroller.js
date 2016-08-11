@@ -20,6 +20,7 @@ function userController() {
     this.profile = function(req, res, next) {
         log.info(req.user);
         res.json(req.user);
+        //TODO: why sending a response from the request itself
     }
 
     this.updateFavourite = function(req, res, next) {
