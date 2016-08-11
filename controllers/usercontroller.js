@@ -21,6 +21,7 @@ function userController() {
         log.info(req.user);
         res.json(req.user);
         //TODO: why sending a response from the request itself
+        // req.user contains the details of user authorized through Passport JWT
     }
 
     this.updateFavourite = function(req, res, next) {
