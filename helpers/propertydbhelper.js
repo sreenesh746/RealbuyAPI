@@ -7,7 +7,7 @@ function propertyDbHelper() {
     var property = require('../models/property');
     var user = require('../models/user');
 
-    this.addProperty = function(req, res, next) {
+    this.addProperty = function(req, res) {
         var propertyDetails = req.params;
         console.log(req.files.photo);
         var filename = req.files.photo.name;
@@ -59,7 +59,7 @@ function propertyDbHelper() {
         });
     };
 
-    this.search = function(req, res, next) {
+    this.search = function(req, res) {
         property.find({
                 $and: [{
                     $or: [{
@@ -87,7 +87,7 @@ function propertyDbHelper() {
             });
     };
 
-    this.featuredProperties=function(req, res, next) {
+    this.featuredProperties=function(req, res) {
         property.find({}).skip(req.params.page * 6).limit(6).sort({
             favCount: -1
         }).exec(function(err, result) {
@@ -98,11 +98,11 @@ function propertyDbHelper() {
                 });
             }
             log.info('featured properties fetched from database');
-            base64.toBase64(result, res, next);
+            base64.toBase64(result, res);
         });
     };
 
-    this.getProperties=function(req, res, next) {
+    this.getProperties=function(req, res) {
         async.parallel([
                 function(callback) {
                     property.find({}).limit(6).exec(callback);

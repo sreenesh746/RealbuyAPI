@@ -11,9 +11,6 @@ module.exports = function(app) {
     var user = require('./controllers/usercontroller');
     var property = require('./controllers/propertycontroller');
     var contact = require('./controllers/contactcontroller');
-    app.get('/', function(req, res, next) {
-        return res.send("WELCOME TO REST API");
-    });
     app.post('/realbuyapi/addProperty', requireAuth, property.createProperty);
     app.post('/realbuyapi/signup', user.createUser); 
     app.post('/realbuyapi/contact', contact.createContact); 

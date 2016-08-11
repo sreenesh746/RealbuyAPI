@@ -8,7 +8,7 @@ function userDbHelper() {
     const passport = require('passport');
     const jwt = require('jsonwebtoken');
 
-    this.addUser = function(req, res, next) {
+    this.addUser = function(req, res) {
         var newUser = new user(req.profile);
         newUser.save(function(err, result) {
             if (err) {
@@ -29,7 +29,7 @@ function userDbHelper() {
         });
     };
 
-    this.authenticateUser = function(req, res, next) {
+    this.authenticateUser = function(req, res) {
         user.findOne({
                 email: req.params.email
             },
@@ -77,7 +77,7 @@ function userDbHelper() {
     };
 
     //TODO: you can combine addFavourite and removeFavourite, done
-    this.updateFavourite = function(req, res, next) {
+    this.updateFavourite = function(req, res) {
         var addOrRemove=0;
         if(req.params.flag=='true'){
             addOrRemove = 1;

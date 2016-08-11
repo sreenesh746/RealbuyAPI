@@ -5,18 +5,18 @@ function propertyController() {
     var passportConfigure=require('../settings/passport');
     const jwt = require('jsonwebtoken');
     // Creating New Property
-    this.createProperty = function(req, res, next) {
+    this.createProperty = function(req, res) {
         //TODO: why didnt you move this function to helper, you moved every other functions, moved
-        dbHelper.addProperty(req,res,next);
+        dbHelper.addProperty(req,res);
     };
 
-    this.search = function(req, res, next) {
+    this.search = function(req, res) {
         log.info(req.params);
-        dbHelper.search(req,res,next);
+        dbHelper.search(req,res);
     };
 
-    this.getFeaturedProperties=function(req,res,next) {
-         dbHelper.featuredProperties(req,res,next);
+    this.getFeaturedProperties=function(req,res) {
+         dbHelper.featuredProperties(req,res);
     };
     // Fetching Details of Properties
     this.getProperties = function(req, res, next) {
@@ -27,7 +27,7 @@ function propertyController() {
                 if (user) {
                     req.user = user;
                 }
-                dbHelper.getProperties(req,res,next);
+                dbHelper.getProperties(req,res);
             })(req, res, next);
     };
 

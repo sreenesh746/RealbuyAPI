@@ -2,7 +2,7 @@ function contactController() {
     var log = require('../logger');
     var contact = require('../models/contact');
     // Creating New Contact Us Message
-    this.createContact = function(req, res, next) {
+    this.createContact = function(req, res) {
         var contactUs = req.params;
         var newContact = new contact(contactUs);
         newContact.save(function(err, result) {
@@ -21,7 +21,7 @@ function contactController() {
         });
     };
     // Fetching Details of Contact Us Messages
-    this.getContactUs = function(req, res, next) {
+    this.getContactUs = function(req, res) {
         contact.find({}, function(err, result) {
             if (err) {
                 log.error(err);
