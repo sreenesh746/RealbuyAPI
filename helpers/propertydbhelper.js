@@ -136,7 +136,7 @@ function propertyDbHelper() {
             function(err, results) {
                 log.info('Properties fetched from database');
                 req.results = results;
-                base64all(req, res, next);
+                base64all.toBase64(req, res, next);
 
             });
     };
@@ -187,7 +187,7 @@ function propertyDbHelper() {
                 log.info('Properties and favourites fetched from database');
                 req.results = results;
                 //TODO: why sending req to base64all?
-                base64all(req, res, next);
+                base64all.toBase64(req, res, next);
             });
     };
 

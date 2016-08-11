@@ -5,7 +5,7 @@ var async = require('async');
 var forEach = require('async-foreach')
 var mime = require('mime-types');
 //TODO: Named function please
-module.exports = function(req,res,next){
+module.exports.toBase64 = function(req,res,next){
 
     var processResults = function(callback) {
         async.forEach(req.results, function(result, callback) {
