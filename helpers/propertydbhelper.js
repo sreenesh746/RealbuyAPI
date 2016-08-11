@@ -79,8 +79,7 @@ function propertyDbHelper() {
                     });
                 } else {
                     log.info('Search successful');
-                    req.result = result;
-                    base64(req, res, next);
+                    base64(result, res, next);
                 }
             });
     };
@@ -92,12 +91,11 @@ function propertyDbHelper() {
             if (err) {
                 log.error(err);
                 return res.json({
-                    'error': err
+                    error: err
                 });
             }
             log.info('featured properties fetched from database');
-            req.result = result;
-            base64(req, res, next);
+            base64.toBase64(result, res, next);
         });
     };
 
