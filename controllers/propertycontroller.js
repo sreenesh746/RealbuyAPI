@@ -1,5 +1,9 @@
 function propertyController() {
-    var dbHelper = require('../helpers/propertydbhelper')
+    var dbHelper = require('../helpers/propertydbhelper');
+    const passport = require('passport');
+    const config = require('../settings/config');
+    var passportConfigure=require('../settings/passport');
+    const jwt = require('jsonwebtoken');
     // Creating New Property
     this.createProperty = function(req, res, next) {
         //TODO: why didnt you move this function to helper, you moved every other functions
@@ -26,12 +30,18 @@ function propertyController() {
     };
     // Fetching Details of Properties
     this.getProperties = function(req, res, next) {
-        dbHelper.getProperties(req,res,next);
+            passportConfigure(passport);
+            passport.authenticate('jwt', {
+                session: false
+            }, function(error, user, info, status) {
+                if (user) {
+                    req.user = user;
+                    dbHelper.getPropertiesAuthorized(req,res,next);
+                }
+                dbHelper.getProperties(req,res,next);
+            })(req, res, next);
     };
 
-    this.getPropertiesAuthorized = function(req, res, next) {
-       dbHelper.getPropertiesAuthorized(req,res,next);
-    };
     return this;
 };
 

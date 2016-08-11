@@ -28,19 +28,6 @@ module.exports = function(app) {
     app.get('/realbuyapi/profile', requireAuth, function(req, res, next) {
         user.profile(req, res, next);
     });
-    app.get('/realbuyapi',
-        //TODO: move this to controller
-        function(req, res, next) {
-            passport.authenticate('jwt', {
-                session: false
-            }, function(error, user, info, status) {
-                if (user) {
-                    req.user = user;
-                    property.getPropertiesAuthorized(req, res, next);
-                }
-                property.getProperties(req, res, next);
-            })(req, res, next);
-        }
-    );
+    app.get('/realbuyapi', property.getProperties);
     app.get('/realbuyapi/featured',property.getFeaturedProperties);
 };
