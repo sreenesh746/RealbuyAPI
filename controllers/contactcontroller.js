@@ -1,42 +1,39 @@
 function contactController() {
     var log = require('../logger');
     var contact = require('../models/contact');
-    // Creating New Contact Us Message
-    this.createContact = function(req, res, next) {
-        var contactUs = req.params;
-        var newContact = new contact(contactUs);
+    var contactUs = req.params;
+    var newContact = new contact(contactUs);
+    this.createContact = function(req, res) {
         newContact.save(function(err, result) {
             if (err) {
                 log.error(err);
-                return res.json(400,{
-                    'error': 'Bad Request'
+                return res.json(400, {
+                    error: 'Bad Request'
                 });
             } else {
                 log.info('successfully posted');
                 return res.json({
-                    'result': result,
-                    'status': 'successfully saved'
+                    status: true,
+                    message: 'successfully saved'
                 });
             }
         });
     };
-    // Fetching Details of Contact Us Messages
-    this.getContactUs = function(req, res, next) {
+    this.getContactUs = function(req, res) {
         contact.find({}, function(err, result) {
             if (err) {
                 log.error(err);
-                return res.json({
-                    'error': err
+                return res.json(500, {
+                    error: err
                 });
             } else {
                 log.info('successfully Retrieved');
                 return res.json({
-                    'contact Us Details': result
+                    messages: result
                 });
             }
         });
     };
     return this;
 };
-
 module.exports = new contactController();

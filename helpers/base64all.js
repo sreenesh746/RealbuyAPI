@@ -1,54 +1,55 @@
-var fs= require('fs');
+var fs = require('fs');
 var log = require('../logger');
 const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach')
 var mime = require('mime-types');
-module.exports = function(req,res,next){
+var error;
+var responseData;
+module.exports.toBase64 = function(results, favourites, cb) {
 
     var processResults = function(callback) {
-        async.forEach(req.results, function(result, callback) {
-            async.forEach(result, function(item, callback) {
-                if(item.photo) {
-                    var data = fs.readFileSync(item.photo);
-                    var base64data = 'data:'+fileType(data).mime+',';
-                    base64data+= new Buffer(data).toString('base64');
-                    item.photo=base64data;
-                }
-                callback();
-            }, 
+        async.forEach(results, function(result, callback) {
+                async.forEach(result, function(item, callback) {
+                        if (item.photo) {
+                            var data = fs.readFileSync(item.photo);
+                            var base64data = 'data:' + fileType(data).mime + ',';
+                            base64data += new Buffer(data).toString('base64');
+                            item.photo = base64data;
+                        }
+                        callback();
+                    },
+                    function(err) {
+                        if (err) {
+                            log.error(err);
+                        }
+                        callback();
+                    });
+            },
             function(err) {
-                if(err)
+                if (err) {
                     log.error(err);
-                callback();
+                }
+                callback(null, results, favourites);
             });
-        }, 
-        function(err) {
-            if(err)
-                log.error(err);
-            callback(undefined, req.results);
-        });
     };
-
-    processResults(function(err, results) {
-        if(err)
+    processResults(function(err, results, favourites) {
+        if (err) {
             log.error(err);
-        log.info('Images processed successfully');
-        res.json({
+            error = {
+                status: 500,
+                message: err.message
+            }
+            return cb(error);
+        }
+        responseData = {
             featured: results[0],
             commercial: results[1],
-            furnishedHomes: results[2],
+            furnished: results[2],
             landAndPlot: results[3],
             rental: results[4],
-			favourites: results[5]
-        });
+            favourites: favourites
+        }
+        return cb(null, responseData);
     });
 };
-
-
-
-
-
-
-
-    

@@ -3,7 +3,6 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
 const config = require('./config');
 
-// Setup work and export for the JWT passport strategy
 module.exports = function(passport) {
     const opts = {
         jwtFromRequest: ExtractJwt.fromAuthHeader(),
@@ -12,7 +11,7 @@ module.exports = function(passport) {
     passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
         User.findOne({
             _id: jwt_payload.id
-        },'name email address phone photo', function(err, user) {
+        },'name email address phone photo favourites', function(err, user) {
             if (err) {
                 return done(err, false);
             }

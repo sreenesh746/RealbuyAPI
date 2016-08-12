@@ -1,4 +1,3 @@
-// Model for the User
 var mongoose = require('../settings/db').mongoose;
 const bcrypt = require('bcrypt');
 
@@ -37,7 +36,6 @@ var userSchema = new mongoose.Schema({
     }]
 });
 
-// Saves the user's password hashed (plain text password storage is not good)
 userSchema.pre('save', function(next) {
     const user = this;
     if (this.isModified('password') || this.isNew) {
@@ -58,7 +56,6 @@ userSchema.pre('save', function(next) {
     }
 });
 
-// Create method to compare password input to password saved in database
 userSchema.methods.comparePassword = function(pw, cb) {
     bcrypt.compare(pw, this.password, function(err, isMatch) {
         if (err) {

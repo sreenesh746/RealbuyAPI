@@ -1,37 +1,64 @@
+var dbHelper = require('../helpers/propertydbhelper');
+var passportConfigure = require('../settings/passport');
+const passport = require('passport');
+const config = require('../settings/config');
+const jwt = require('jsonwebtoken');
+
 function propertyController() {
-    var dbHelper = require('../helpers/propertydbhelper')
-    // Creating New Property
-    this.createProperty = function(req, res, next) {
-        var propertyDetails = req.params;
-        propertyDetails.owner = req.user._id;
-        location = [propertyDetails['lng'], propertyDetails['lat']];
-        delete propertyDetails['lng'];
-        delete propertyDetails['lat'];
-        propertyDetails['location'] = location;
-        var currentDateTime=Date.now();
-        propertyDetails['photo'] = './uploads/properties/' + currentDateTime + req.files.photo.name;
-        log.info(propertyDetails);
-        req.propertyDetails = propertyDetails;
-        dbHelper.addProperty(req,res,next);
+    this.createProperty = function(req, res) {
+        dbHelper.addProperty(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+        });
     };
-
-    this.search = function(req, res, next) {
+    this.search = function(req, res) {
         log.info(req.params);
-        dbHelper.search(req,res,next);
+        dbHelper.search(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+        });
     };
-
-    this.getFeaturedProperties=function(req,res,next) {
-         dbHelper.featuredProperties(req,res,next);
+    this.getFeaturedProperties = function(req, res) {
+        dbHelper.featuredProperties(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+        });
     };
-    // Fetching Details of Properties
     this.getProperties = function(req, res, next) {
-        dbHelper.getProperties(req,res,next);
-    };
-
-    this.getPropertiesAuthorized = function(req, res, next) {
-       dbHelper.getPropertiesAuthorized(req,res,next);
+        passportConfigure(passport);
+        passport.authenticate('jwt', {
+                session: false
+            },
+            function(error, user, info, status) {
+                if (user) {
+                    req.user = user;
+                }
+                dbHelper.getProperties(req, function(err, result) {
+                    if (err) {
+                        res.json(err.status, {
+                            message: err.message
+                        });
+                    } else {
+                        res.json(200, result);
+                    }
+                });
+            })(req, res, next);
     };
     return this;
 };
-
 module.exports = new propertyController();

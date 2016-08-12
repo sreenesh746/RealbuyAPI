@@ -1,36 +1,46 @@
-function userController() {
-    var log = require('../logger');
-    var dbHelper = require('../helpers/userdbhelper');
+var log = require('../logger');
+var dbHelper = require('../helpers/userdbhelper');
 
-    // Creating New User
-    this.createUser = function(req, res, next) {
+function userController() {
+    this.createUser = function(req, res) {
         var profile = req.params;
         log.info(profile);
-        var currentDateTime=Date.now();
+        var currentDateTime = Date.now();
         profile['photo'] = './uploads/profile/' + currentDateTime + req.files.avatar.name;
         req.profile = profile;
-        dbHelper.addUser(req,res,next);
+        dbHelper.addUser(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+
+        });
     };
-
-    this.login = function(req, res, next) {
-        dbHelper.authenticateUser(req,res,next);
+    this.login = function(req, res) {
+        dbHelper.authenticateUser(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+        });
     };
-
-
-    this.profile = function(req, res, next) {
-        log.info(req.user);
-        res.json(req.user);
-    }
-
-    this.updateFavourite = function(req, res, next) {
-        if (req.params.flag == 'true') {
-            dbHelper.addFavourite(req,res,next);
-        } else if (req.params.flag == 'false') {
-            dbHelper.removeFavourite(req,res,next);
-        }       
+    this.updateFavourite = function(req, res) {
+        dbHelper.updateFavourite(req, function(err, result) {
+            if (err) {
+                res.json(err.status, {
+                    message: err.message
+                });
+            } else {
+                res.json(200, result);
+            }
+        });
     };
-  
     return this;
 };
-
 module.exports = new userController();
