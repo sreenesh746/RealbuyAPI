@@ -1,9 +1,9 @@
 function contactController() {
     var log = require('../logger');
     var contact = require('../models/contact');
+    var contactUs = req.params;
+    var newContact = new contact(contactUs);
     this.createContact = function(req, res) {
-        var contactUs = req.params;
-        var newContact = new contact(contactUs);
         newContact.save(function(err, result) {
             if (err) {
                 log.error(err);
