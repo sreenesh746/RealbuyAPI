@@ -1,18 +1,15 @@
 var restify = require('restify');
 var config = require('./settings/config');
 var log = require('./logger');
+var cors = require('cors');
 var app = restify.createServer({
     name: 'Realbuy-api',
     log : log
 });
-
 app.pre(function (request, response, next) {
     request.log.info({ req: request }, 'REQUEST');
     next();
 });
-
-var cors = require('cors');
-
 app.use(restify.fullResponse());
 app.use(restify.bodyParser({
     auto: { 

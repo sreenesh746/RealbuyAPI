@@ -11,12 +11,12 @@ module.exports = function(app) {
     app.use(passport.initialize());
     require('./settings/passport')(passport);
     app.post('/realbuyapi/addProperty', requireAuth, property.createProperty);
-    app.post('/realbuyapi/signup', user.createUser); 
-    app.post('/realbuyapi/contact', contact.createContact); 
-    app.get('/realbuyapi/contact', contact.getContactUs); 
+    app.post('/realbuyapi/signup', user.createUser);
+    app.post('/realbuyapi/contact', contact.createContact);
+    app.get('/realbuyapi/contact', contact.getContactUs);
     app.get('/realbuyapi/search', property.search);
     app.put('/realbuyapi/favourite', requireAuth, user.updateFavourite);
     app.post('/realbuyapi/login', user.login);
     app.get('/realbuyapi', property.getProperties);
-    app.get('/realbuyapi/featured',property.getFeaturedProperties);
+    app.get('/realbuyapi/featured', property.getFeaturedProperties);
 };

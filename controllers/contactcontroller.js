@@ -7,7 +7,7 @@ function contactController() {
         newContact.save(function(err, result) {
             if (err) {
                 log.error(err);
-                return res.json(400,{
+                return res.json(400, {
                     error: 'Bad Request'
                 });
             } else {
@@ -19,12 +19,11 @@ function contactController() {
             }
         });
     };
-
     this.getContactUs = function(req, res) {
         contact.find({}, function(err, result) {
             if (err) {
                 log.error(err);
-                return res.json(500,{
+                return res.json(500, {
                     error: err
                 });
             } else {
@@ -37,5 +36,4 @@ function contactController() {
     };
     return this;
 };
-
 module.exports = new contactController();

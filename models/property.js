@@ -1,5 +1,4 @@
 var mongoose = require('../settings/db').mongoose;
-
 var propertySchema = new mongoose.Schema({
     saleType: {
         type: String,
