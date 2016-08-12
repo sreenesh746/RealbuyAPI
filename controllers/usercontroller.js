@@ -1,6 +1,6 @@
+var log = require('../logger');
+var dbHelper = require('../helpers/userdbhelper');
 function userController() {
-    var log = require('../logger');
-    var dbHelper = require('../helpers/userdbhelper');
 
     this.createUser = function(req, res) {
         var profile = req.params;
@@ -8,7 +8,18 @@ function userController() {
         var currentDateTime=Date.now();
         profile['photo'] = './uploads/profile/' + currentDateTime + req.files.avatar.name;
         req.profile = profile;
-        dbHelper.addUser(req,res);
+        dbHelper.addUser(req,res,function(err,result){
+            if(err)
+            {
+                log.error(err);
+                res.json(result.status,{message:result.message});
+            }
+            else
+            {
+                res.json(result.status,{message:result.message,data:result.data});
+            }
+            
+        });
     };
     this.login = function(req, res) {
         dbHelper.authenticateUser(req,res);

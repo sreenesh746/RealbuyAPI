@@ -1,9 +1,10 @@
+var dbHelper = require('../helpers/propertydbhelper');
+var passportConfigure=require('../settings/passport');
+const passport = require('passport');
+const config = require('../settings/config');
+const jwt = require('jsonwebtoken');
+
 function propertyController() {
-    var dbHelper = require('../helpers/propertydbhelper');
-    const passport = require('passport');
-    const config = require('../settings/config');
-    var passportConfigure=require('../settings/passport');
-    const jwt = require('jsonwebtoken');
 
     this.createProperty = function(req, res) {
         dbHelper.addProperty(req,res);

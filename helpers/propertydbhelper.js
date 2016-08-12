@@ -1,11 +1,12 @@
+var fs = require('fs');
+var log = require('../logger');
+var async = require('async');
+var base64 = require('./base64');
+var base64all = require('./base64all');
+var property = require('../models/property');
+var user = require('../models/user');
+
 function propertyDbHelper() {
-    var fs = require('fs');
-    var log = require('../logger');
-    var async = require('async');
-    var base64 = require('./base64');
-    var base64all = require('./base64all');
-    var property = require('../models/property');
-    var user = require('../models/user');
 
     this.addProperty = function(req, res) {
         var propertyDetails = req.params;

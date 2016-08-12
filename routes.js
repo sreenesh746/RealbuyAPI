@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const requireAuth = passport.authenticate('jwt', {
     session: false
 });
+var user = require('./controllers/usercontroller');
+var property = require('./controllers/propertycontroller');
+var contact = require('./controllers/contactcontroller');
 module.exports = function(app) {
     app.use(passport.initialize());
     require('./settings/passport')(passport);
-    var user = require('./controllers/usercontroller');
-    var property = require('./controllers/propertycontroller');
-    var contact = require('./controllers/contactcontroller');
     app.post('/realbuyapi/addProperty', requireAuth, property.createProperty);
     app.post('/realbuyapi/signup', user.createUser); 
     app.post('/realbuyapi/contact', contact.createContact); 

@@ -44,7 +44,7 @@ module.exports.toBase64 = function(results,res,favourites){
             furnishedHomes: results[2],
             landAndPlot: results[3],
             rental: results[4],
-			favourites: favourites
+            favourites: favourites
         });
     });
 };

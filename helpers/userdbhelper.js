@@ -1,30 +1,46 @@
-function userDbHelper() {
-    var log = require('../logger');
-    var fs = require('fs');
-    var user = require('../models/user');
-    var authUser = require('../models/user');
-    var property = require('../models/property')
-    const config = require('../settings/config');
-    const passport = require('passport');
-    const jwt = require('jsonwebtoken');
+const config = require('../settings/config');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+var log = require('../logger');
+var fs = require('fs');
+var user = require('../models/user');
+var authUser = require('../models/user');
+var property = require('../models/property');
 
-    this.addUser = function(req, res) {
+
+function userDbHelper() {
+
+    this.addUser = function(req, res,cb) {
         var newUser = new user(req.profile);
         newUser.save(function(err, result) {
             if (err) {
-                log.error('Email Already Exists');
-                return res.json(400,{
-                    'error': 'Email Already Exists'
-                });
+                var details = {
+                    status:400,
+                    success:false, 
+                    message: 'Email Already Exists',
+                    data:null
+                };
+                return cb(err,details);
             } else {
                 fs.rename(req.files.avatar.path, req.profile['photo'], function(err) {
-                    if (err)
-                        return  log.error(err);
+                    if (err){
+                        details = {
+                            status:500,
+                            success:false, 
+                            message: 'File Upload Failed',
+                            data:null
+                        };
+                        return cb(err,details);
+                    }
                 });
                 log.info('User Added');
-                return res.json({
-                    'status': 'successfully saved'
-                });
+                details = {
+                    status:200,
+                    success:true, 
+                    message: 'Sign Up Success',
+                    data:null
+                };
+                cb(false,details);
             }
         });
     };
