@@ -1,4 +1,3 @@
-// Model for the Property
 var mongoose = require('../settings/db').mongoose;
 
 var propertySchema = new mongoose.Schema({

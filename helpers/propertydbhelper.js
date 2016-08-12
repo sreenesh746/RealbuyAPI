@@ -24,7 +24,7 @@ function propertyDbHelper() {
             if (err) {
                 log.error(err);
                 return res.json(400,{
-                    'error': err
+                    error: err
                 });
             } else {
                 fs.rename(req.files.photo.path, propertyDetails['photo'], function(err) {
@@ -33,7 +33,8 @@ function propertyDbHelper() {
                 });
                 log.info('property added');
                 res.json({
-                    'status': 'successfully saved'
+                    status: true,
+                    message: 'successfully saved'
                 });
                 user.findOneAndUpdate({
                         _id: result.owner
@@ -61,30 +62,30 @@ function propertyDbHelper() {
 
     this.search = function(req, res) {
         property.find({
-                $and: [{
-                    $or: [{
-                        saleType: req.params.option
-                    }, {
-                        availability: req.params.option
-                    }]
+            $and: [{
+                $or: [{
+                    saleType: req.params.option
                 }, {
-                    $text: {
-                        $search: req.params.keywords
-                    }
+                    availability: req.params.option
                 }]
-            },
-            function(err, result) {
-                if (err) {
-                    log.error(err);
-                    return res.json({
-                        'error': err
-                    });
-                } else {
-                    log.info('Search successful');
-                    req.result = result;
-                    base64.toBase64(result, res);
+            }, {
+                $text: {
+                    $search: req.params.keywords
                 }
-            });
+            }]
+        },
+        function(err, result) {
+            if (err) {
+                log.error(err);
+                return res.json(500,{
+                    error: err
+                });
+            } else {
+                log.info('Search successful');
+                req.result = result;
+                base64.toBase64(result, res);
+            }
+        });
     };
 
     this.featuredProperties=function(req, res) {
@@ -93,7 +94,7 @@ function propertyDbHelper() {
         }).exec(function(err, result) {
             if (err) {
                 log.error(err);
-                return res.json({
+                return res.json(500,{
                     error: err
                 });
             }
@@ -141,7 +142,7 @@ function propertyDbHelper() {
                 if(req.user)
                     base64all.toBase64(results, res, req.user.favourites);
                 else
-                    base64all.toBase64(results, res,null);
+                    base64all.toBase64(results, res, null);
             });
     };
     return this;

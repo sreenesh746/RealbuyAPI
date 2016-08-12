@@ -5,7 +5,6 @@ const requireAuth = passport.authenticate('jwt', {
     session: false
 });
 module.exports = function(app) {
-    //TODO: remove silly comments inside functions, comment only the logics that is if they are complex.
     app.use(passport.initialize());
     require('./settings/passport')(passport);
     var user = require('./controllers/usercontroller');
@@ -17,8 +16,7 @@ module.exports = function(app) {
     app.get('/realbuyapi/contact', contact.getContactUs); 
     app.get('/realbuyapi/search', property.search);
     app.put('/realbuyapi/favourite', requireAuth, user.updateFavourite);
-    app.post('/realbuyapi/login', user.login); 
-    app.get('/realbuyapi/profile', requireAuth, user.profile);
+    app.post('/realbuyapi/login', user.login);
     app.get('/realbuyapi', property.getProperties);
     app.get('/realbuyapi/featured',property.getFeaturedProperties);
 };

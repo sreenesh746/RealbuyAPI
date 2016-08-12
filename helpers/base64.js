@@ -3,7 +3,7 @@ var log = require('../logger');
 const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach');
-//TODO: please use a named function, done
+
 module.exports.toBase64 = function(result,res){
 
     var processResults = function(callback) {

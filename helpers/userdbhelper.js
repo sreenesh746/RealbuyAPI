@@ -34,14 +34,11 @@ function userDbHelper() {
                 email: req.params.email
             },
             function(err, authUser) {
-                //TODO: use diff name here, confused with 'user', fixed
                 if (err)
                 {
                     log.error(err);
                     res.json(400,{message:'Bad Request'});
                 }
-
-                    //TODO: why no response, fixed
                 else if (!authUser) {
                     log.info('Authentication failed. User not found.');
                     res.json(401, {
@@ -49,11 +46,8 @@ function userDbHelper() {
                         message: 'Authentication failed. User not found.'
                     });
                 } else {
-                        // Check if password matches
                         authUser.comparePassword(req.params.password, function(err, isMatch) {
                         if (isMatch) {
-                            //TODO: why checking for err and isMatch at the same time, fixed
-                            // Create token if the password matched and no error was thrown
                             const token = jwt.sign({
                                 id: authUser._id
                             }, config.secret, {
@@ -76,7 +70,6 @@ function userDbHelper() {
             });
     };
 
-    //TODO: you can combine addFavourite and removeFavourite, done
     this.updateFavourite = function(req, res) {
         var addOrRemove=0;
         if(req.params.flag=='true'){

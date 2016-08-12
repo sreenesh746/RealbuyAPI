@@ -4,7 +4,7 @@ const fileType = require('file-type');
 var async = require('async');
 var forEach = require('async-foreach')
 var mime = require('mime-types');
-//TODO: Named function please, done
+
 module.exports.toBase64 = function(results,res,favourites){
 
     var processResults = function(callback) {
