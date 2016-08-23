@@ -3,6 +3,7 @@ var contact = require('../models/contact');
 function contactController() {
     this.createContact = function(req, res) {
         var contactUs = req.params;
+        log.info(req.params);
         var newContact = new contact(contactUs);
         newContact.save(function(err, result) {
             if (err) {

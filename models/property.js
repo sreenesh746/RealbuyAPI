@@ -8,7 +8,7 @@ var propertySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    city: {
+    name: {
         type: String,
         required: true
     },
@@ -22,7 +22,7 @@ var propertySchema = new mongoose.Schema({
         index: '2d'
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     bathrooms: {
@@ -79,7 +79,7 @@ var propertySchema = new mongoose.Schema({
 });
 
 propertySchema.index({
-    address: 'text',
-    city: 'text'
+    name: 'text',
+    address: 'text'
 });
 module.exports = mongoose.model('property', propertySchema);
