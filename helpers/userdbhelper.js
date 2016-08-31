@@ -66,7 +66,7 @@ function userDbHelper() {
                             const token = jwt.sign({
                                 id: authUser._id
                             }, config.secret, {
-                                expiresIn: 180 // in seconds
+                                expiresIn: 86400 // in seconds
                             });
                             log.info('Authenticated User');
                             responseData = {
@@ -87,7 +87,7 @@ function userDbHelper() {
     };
     this.updateFavourite = function(req, cb) {
         var addOrRemove = 0;
-        if (req.params.flag == 'true') {
+        if (req.params.flag == true) {
             addOrRemove = 1;
             user.findOneAndUpdate({
                     _id: req.user._id
@@ -108,7 +108,7 @@ function userDbHelper() {
                         log.info('favourite added');
                     }
                 });
-        } else if (req.params.flag == 'false') {
+        } else if (req.params.flag == false) {
             addOrRemove = -1;
             user.update({
                     _id: req.user._id

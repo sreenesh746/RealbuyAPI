@@ -13,7 +13,7 @@ module.exports.toBase64 = function(results, favourites, cb) {
                 async.forEach(result, function(item, callback) {
                         if (item.photo) {
                             var data = fs.readFileSync(item.photo);
-                            var base64data = 'data:' + fileType(data).mime + ',';
+                            var base64data = 'data:' + fileType(data).mime + ';base64,';
                             base64data += new Buffer(data).toString('base64');
                             item.photo = base64data;
                         }
