@@ -6,12 +6,7 @@ var app = restify.createServer({
     name: 'Realbuy-api',
     log: log
 });
-app.pre(function(request, response, next) {
-    request.log.info({
-        req: request
-    }, 'REQUEST');
-    next();
-});
+
 app.use(restify.fullResponse());
 app.use(restify.bodyParser({
     auto: {
@@ -25,7 +20,7 @@ app.use(restify.bodyParser({
 }));
 app.pre(cors());
 app.use(restify.queryParser());
-app.listen(config.port, function() {
+app.listen(config.port,config.server_ip_address, function() {
     console.log('server listening on port number', config.port);
 });
 

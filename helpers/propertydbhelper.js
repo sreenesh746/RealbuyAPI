@@ -11,6 +11,7 @@ var error;
 function propertyDbHelper() {
     this.addProperty = function(req, cb) {
         var propertyDetails = req.params;
+        console.log(req.params);
         console.log(req.files.photo);
         var filename = req.files.photo.name;
         propertyDetails.owner = req.user._id;
@@ -149,7 +150,9 @@ function propertyDbHelper() {
     this.getProperties = function(req, cb) {
         async.parallel([
                 function(callback) {
-                    property.find({}).limit(6).exec(callback);
+                    property.find({}).limit(6).sort({
+                        favCount: -1
+                    }).exec(callback);
                 },
                 function(callback) {
                     property.find({
@@ -193,7 +196,7 @@ function propertyDbHelper() {
                 if (req.user) {
                     favourites = req.user.favourites;
                 } else {
-                    favourites = null;
+                    favourites = undefined;
                 }
                 base64all.toBase64(results, favourites, function(err, result) {
                     if (err) {
